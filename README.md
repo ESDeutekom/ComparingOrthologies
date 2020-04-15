@@ -22,15 +22,22 @@ Data and scripts used in the analyses
 
 #### Software and tools in analyses
 blastp			2.7.1
+
 hhmbuild 		HMMER 3.1b2
+
 python			3.7.6
+
 samtools 		0.1.19-96b5f2294a
 
-##### python packages
+##### Python packages
 ete3			3.1.1
+
 biopython		1.76   
+
 numpy			1.18.1
+
 pandas			1.0.1
+
 scipy			1.4.1
 
 
@@ -42,8 +49,13 @@ python			3.7.6
 
 ##### Python packages
 matplotlib 		3.1.0
+
 pandas			0.24.2
+
 numpy			1.16.4
+
 scipy			1.3.0
+
 seaborn			0.10.0
+
 snakemake		5.5.4
