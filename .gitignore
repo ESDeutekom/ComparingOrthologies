@@ -1,0 +1,17 @@
+.DS_Store
+
+# Byte-compiled
+__pycache__/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# User specific files
+conda_env.txt 
+Trash_notebook.ipynb
+*.png
+*.tiff
+
+# User specific directories
+Results/
+eukarya/database/
