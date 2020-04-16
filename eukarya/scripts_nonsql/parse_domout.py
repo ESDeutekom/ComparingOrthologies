@@ -1,11 +1,13 @@
 #python3
-###################################################
-## Parse panther LECA hits, best non overlapping
-###################################################
 
 import sys
 from Bio import SeqIO
 from parse_domtbout_func import *
+
+###################################################
+## Parse panther LECA hits, best non overlapping
+###################################################
+
 # functions to parse and get best non-overlapping hits and pseudo_genes
 
 if len(sys.argv) != 3:

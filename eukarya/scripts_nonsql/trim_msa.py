@@ -1,13 +1,14 @@
 #python3
 
-#####################################################################################
-## Remove empty columns from (MSA) files left over by MSA containing more sequences
-## that were parsed out for stricter LECA definition
-#####################################################################################
 import sys
 from Bio import AlignIO
 import re
 import sys
+
+#####################################################################################
+## Remove empty columns from (MSA) files left over by MSA containing more sequences
+## that were parsed out for stricter LECA definition
+#####################################################################################
 
 if len(sys.argv) != 3:
     print("Need 2 arguments: [MSA file] [MSA trimmed out file name]")

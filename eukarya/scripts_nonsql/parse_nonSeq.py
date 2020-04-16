@@ -1,11 +1,13 @@
 #python3
+
+import sys
+from Bio import SeqIO
+import re
+
 #################################################################################
 ## Parse out empty sequences from MSA files Ancestral genomes Huang et al. 2018
 ## Parse out non LECA/Ancestral Panther IDs
 #################################################################################
-import sys
-from Bio import SeqIO
-import re
 
 if len(sys.argv) != 3:
     print("Need 2 arguments: [MSA file] [Panther LECA IDs]")

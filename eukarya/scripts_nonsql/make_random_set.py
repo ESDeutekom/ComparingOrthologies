@@ -1,6 +1,8 @@
 #python3
+
 import sys
 from random import sample
+
 ####################################################################
 ## Make a random set of OGs (random pairs) to compare with the
 ## interacting and non-interacting pairs and their distances

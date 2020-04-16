@@ -6,6 +6,7 @@ import pandas as pd
 ################################################################
 ## Make a binary matrix from the Presence and Absence matrix
 ###############################################################
+
 if len(sys.argv) != 3:
     print("Need 2 arguments: [Presence and absence input file] [binary output file name]")
     sys.exit()

@@ -1,10 +1,11 @@
 #python3
+
+import sys
+
 ###############################################
 ## Get a BioGrid corrected version of
 ## Trabuco et al. negative interaction neg_set
 ###############################################
-
-import sys
 
 if len(sys.argv) != 3:
     print("Need 2 arguments: [BioGRID interactions parsed] [negative interaction Trabuco et al. parsed]")

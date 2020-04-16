@@ -1,6 +1,11 @@
 #python3
+
 import sys
 from itertools import combinations, combinations_with_replacement
+
+###################################################################
+## get a pseudo negative set from the interaction (BioGRID) set
+##################################################################
 
 if len(sys.argv) != 3:
     print("Need 2 arguments: [Parsed BioGRID interactions file] [pseudo negative interaciton out file name]")

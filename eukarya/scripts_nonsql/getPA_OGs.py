@@ -1,10 +1,11 @@
 #python3
 
+import sys
+
 #####################################################
 ## From orthology inference output
 ## Get the presence and absence profiles
 #####################################################
-import sys
 
 if len(sys.argv) != 3:
     print("Need 2 arguments: [Orthologous group input file] [PA output file name]")

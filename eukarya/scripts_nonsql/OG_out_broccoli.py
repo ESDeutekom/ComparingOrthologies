@@ -1,5 +1,7 @@
 #python 3
+
 import sys
+
 ######################################################
 ## Make required OG input file from orthology output
 ## Broccoli orthology

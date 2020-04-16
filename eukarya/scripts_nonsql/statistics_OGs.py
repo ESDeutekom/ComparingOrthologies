@@ -1,9 +1,12 @@
 #python3
+
+import sys
+import statistics as s
+
 ##########################
 ## statistics on orthogroups
 ##########################
-import sys
-import statistics as s
+
 if len(sys.argv) != 3:
     print("Need 2 arguments: [Orthologous group input file] [LECA orthologous groups input list]")
     sys.exit()

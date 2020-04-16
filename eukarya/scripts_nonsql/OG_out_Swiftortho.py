@@ -1,9 +1,11 @@
 #python 3
+
+import sys
+
 ######################################################
 ## Make required OG input file from orthology output
 ## SiwftOrtho orthology
 ######################################################
-import sys
 
 file_og = sys.argv[1]
 file_sequence_ids = sys.argv[2]

@@ -1,10 +1,10 @@
 #python3
 
+import sys
+
 ###################################################
 ## Translate negative interactions to OG ids
 ###################################################
-
-import sys
 
 if len(sys.argv) != 4:
     print("Need 3 arguments: [Negative interaction set] [Ortholgous group file] [negative interaction in OGs out file]")

@@ -1,9 +1,10 @@
 #python3
 
+import sys
+
 ###################################################
 ## Translate interactions to OG ids of orthology
 ###################################################
-import sys
 
 if len(sys.argv) != 4:
     print("Need 3 arguments: [bioGrid interactions parsed] [Orthologous group input file] [orthology interactions output file name]")
@@ -18,7 +19,6 @@ try:
     open(sys.argv[2])
 except IOError:
     print("No such input file"); sys.exit()
-
 
 
 #eukarya to og depends on orthology used.

@@ -1,10 +1,13 @@
 #python3
+
+import sys
+from operator import itemgetter
+
 ######################################################################
 ## Parse hmmdomtbout to get non overlapping and best hits from file
 ## For further processing in parse_domtbout.py
 ######################################################################
-import sys
-from operator import itemgetter
+
 
 def parse_domtbout(domtbfile, accession = False):
     #parse file into a dictionary

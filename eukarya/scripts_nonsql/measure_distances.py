@@ -1,8 +1,4 @@
 #python3
-############################################################
-## Measure distances between phylogenetic profiles
-## between negative sets and the positive interaction set
-############################################################
 
 import sys
 import random
@@ -11,6 +7,11 @@ import numpy as np
 from scipy.spatial import distance
 from scipy.stats import spearmanr, pearsonr, kendalltau
 from itertools import combinations, combinations_with_replacement
+
+############################################################
+## Measure distances between phylogenetic profiles
+## between negative sets and the positive interaction set
+############################################################
 
 if len(sys.argv) != 6:
     print("Need 5 arguments: [Ortholgoy profiles] [LECA list file] [BioGRID interactions] [Trabuco negative interactions] [Pseudo negative interactions]")

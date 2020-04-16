@@ -1,10 +1,11 @@
 #python 3
+
+import sys
+
 ######################################################
 ## Make required OG input file from orthology output
 ## SonicParanoid orthology
 ######################################################
-
-import sys
 
 file_in = sys.argv[1]
 file_out = sys.argv[2]

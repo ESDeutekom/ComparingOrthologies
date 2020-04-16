@@ -1,11 +1,12 @@
 #python3
+
+import sys
+from collections import Counter
+
 ###################################
 ## Parse negative interaction set
 ## Trabuco et al. 2012
 ###################################
-import sys
-from collections import Counter
-
 
 if len(sys.argv) != 3:
     print("Need 2 arguments: [Trabuco negative interaction file input] [uniprot to enseml id] [metadata human proteome] [out file name]")

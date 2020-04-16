@@ -1,11 +1,12 @@
 #python3
 
+import sys
+from ete3 import Tree
+
 ################################################################################
 ## Getting PANTHER LECA's from ancestral genomes trees by Huang et al. 2018
 ## Using additional parsing criteria to be more strict
 ################################################################################
-import sys
-from ete3 import Tree
 
 if len(sys.argv) != 5:
     print("Need 4 arguments: [ancestral genome tree] [out file directory name] [Patnher ID of tree] [stats out file name]")

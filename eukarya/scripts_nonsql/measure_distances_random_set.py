@@ -1,8 +1,5 @@
 #python3
-#######################################################
-## Measure distances for the random interaction set
-## This was done later, so added seperate file and code
-#######################################################
+
 import sys
 import random
 import pandas as pd
@@ -10,6 +7,11 @@ import numpy as np
 from scipy.spatial import distance
 from scipy.stats import spearmanr, pearsonr, kendalltau
 from itertools import combinations, combinations_with_replacement
+
+#######################################################
+## Measure distances for the random interaction set
+## This was done later, so added seperate file and code
+#######################################################
 
 pro_file = sys.argv[1] #phylogenetic profile
 int_file = sys.argv[2] #random interactions file

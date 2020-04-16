@@ -1,4 +1,3 @@
-#!/home/eva/eva2/Programs/miniconda3/bin/python
 #python 3
 '''
     Author: John van Dam.

@@ -1,12 +1,13 @@
 #python3
 
-#################################
-## Parse BIOGRID interactions
-#################################
 import sys
 from itertools import groupby, chain
 from operator import itemgetter, add
 import copy
+
+#################################
+## Parse BIOGRID interactions
+#################################
 
 if len(sys.argv) != 8:
     print("Need 7 arguments: [BioGRID interactions input file] [metadatafile of set] [ID translation file] [all_out file name] [sys_out file name] [taxID] [minimum pubmed IDs wanted]")
