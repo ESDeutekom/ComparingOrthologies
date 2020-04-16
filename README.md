@@ -4,7 +4,7 @@
 
 
 Manuscript: "Comparing orthology methods and their performance by recapitulating patterns of eukaryotic genome evolution."
-Author: E.S.Deutekom, Berend Snel, John van Dam
+Authors: E.S. Deutekom, B. Snel, T.J.P. van Dam
 
 ## Disclaimer
 This serves to share code and data for reproducibility.
