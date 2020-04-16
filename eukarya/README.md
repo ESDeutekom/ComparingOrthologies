@@ -1,18 +1,13 @@
 ## Contained directories and files
 ## eukarya
-Data and scripts used in the analyses
+Data and scripts used in the analyses. Contains:
 
-Contains:
 #### annotations
 All autmatically inferred orthologous groups and LECA orthologous group lists, and manually inferred orthologous groups. 
 
 #### data
-Species trees and lists for dolls parsimony. 
-(Non-)interaction datasets.
+Species trees and lists for Dollo parsimony.
  
-#### database
-Sql database of the eukarya used for easy query-ing in Jupiter notebooks.
-
 #### scripts
 Used for sql database
 
