@@ -1,4 +1,4 @@
-#!/home/sam/miniconda3/bin/python3.6
+#python3.6
 
 import numpy as np
 import numpy.random as rand
@@ -11,6 +11,10 @@ import bisect
 import scipy.special as special
 from scipy.stats import hmean
 
+###################################################
+## Module by Sam
+## The F-Grand K-clique score for cluster overlap
+##################################################
 
 import matplotlib as mpl
 mpl.use('Agg')
