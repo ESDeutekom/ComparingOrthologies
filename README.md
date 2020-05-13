@@ -18,7 +18,7 @@ Manuscript figures: Manuscript_Plots.ipynb
 Supplementary figures: Supplementary Material Figures.ipynb
 
 ### eukarya directory
-Contains the data and scripts used in the analyses
+Contains part of the data and scripts used in the analyses minimally needed to reproduce the figures. 
 
 #### Software and tools in analyses
 - blastp		2.7.1
