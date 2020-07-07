@@ -1,5 +1,6 @@
 #python3
 
+import os
 import sys
 
 ###############################################
@@ -7,25 +8,28 @@ import sys
 ## Trabuco et al. negative interaction neg_set
 ###############################################
 
-if len(sys.argv) != 3:
-    print("Need 2 arguments: [BioGRID interactions parsed] [negative interaction Trabuco et al. parsed]")
+if len(sys.argv) != 5:
+    print("Need 4 arguments: [BioGRID interactions parsed] [negative interaction Trabuco et al. parsed] [overlap_out] [corsschecked out]")
     sys.exit()
 
 biogrid_file = sys.argv[1] #BioGRID interactions parsed
 neg_set_file = sys.argv[2] #Trabuco et al. negative set parsed
 overlap_out = sys.argv[3] #interactions that are overlapping
-neg_set_crosscheck = sys.argv[4] #interaction that are not overlapping (and this negative)
+neg_set_crosscheck = sys.argv[4] #interaction that are not overlapping (and is negative)
 
 try:
-	open(sys.argv[1])
+    open(sys.argv[1])
     open(sys.argv[2])
 except IOError:
     print("No such input file"); sys.exit()
 
+#Check if file is not empty
+for file in (sys.argv[1], sys.argv[2]):
+    if os.path.getsize(file) <= 1:
+        print(file, "file is empty"); sys.exit()
 
 biogrid_file = open(biogrid_file, "r")
 header = biogrid_file.readline()
-print(header)
 pairs_list_bio = {}
 for lines in biogrid_file:
     line = lines.rstrip().split()
@@ -39,7 +43,6 @@ neg_set_file = open(neg_set_file, "r")
 overlap_out = open(overlap_out, "w")
 neg_set_crosscheck = open(neg_set_crosscheck, "w")
 header2 = neg_set_file.readline()
-print(header2)
 neg_set_crosscheck.write(header2)
 for lines in neg_set_file:
     line = lines.rstrip().split()

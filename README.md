@@ -8,7 +8,7 @@ Authors: E.S. Deutekom, B. Snel, T.J.P. van Dam
 
 ## Disclaimer
 This serves to share code and data for reproducibility.
-Due to the amount of data, only the files in green in the flowchart are provided. 
+Due to the amount of data, only the files in green in the flowchart are provided. The flowchart shows a summary of the workflow, with the most important scripts and files. Some scripts that are used for supplementary figures and/or results are not shown. 
 Any additional data can be shared upon request.
 
 ## Contained directories and files
@@ -18,7 +18,7 @@ Manuscript figures: Manuscript_Plots.ipynb
 Supplementary figures: Supplementary Material Figures.ipynb
 
 ### eukarya directory
-Contains part of the data and scripts used in the analyses minimally needed to reproduce the figures. 
+Contains part of the data and scripts used in the analyses minimally needed to reproduce the figures.
 
 #### Software and tools in analyses
 - blastp		2.7.1
@@ -35,7 +35,7 @@ Contains part of the data and scripts used in the analyses minimally needed to r
 
 
 ### Figures directory
-Contains the (supplementary) figures prduced for the manuscript. 
+Contains the (supplementary) figures prduced for the manuscript.
 Figures were produced using the following list of software and tools.
 
 #### Software and tools

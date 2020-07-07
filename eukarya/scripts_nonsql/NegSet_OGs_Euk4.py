@@ -1,9 +1,10 @@
 #python3
 
+import os
 import sys
 
 ###################################################
-## Translate negative interactions to OG ids
+## Translate negative interaction sets to OG ids
 ###################################################
 
 if len(sys.argv) != 4:
@@ -15,16 +16,19 @@ OG_file = sys.argv[2] #Orthologous group file
 neg_out_file = sys.argv[3] #out fle
 
 try:
-	open(sys.argv[1])
+    open(sys.argv[1])
     open(sys.argv[2])
 except IOError:
     print("No such input file"); sys.exit()
 
+#Check if file is not empty
+for file in (sys.argv[1], sys.argv[2]):
+    if os.path.getsize(file) <= 1:
+        print(file, "file is empty"); sys.exit()
 
 #eukarya to og depends on orthology used.
 #Translate eukarya to OGs
 og_file = open(OG_file, "r") #.TXT HAS NO HEADER
-
 euk_to_og_d = {}
 for lines in og_file:
     line = lines.rstrip().split(":")
@@ -33,7 +37,7 @@ for lines in og_file:
     #if OG_id in leca_d:
     for seq in seq_list:
         if seq not in euk_to_og_d:
-            euk_to_og_d[seq] = [OG_id]
+            euk_to_og_d[seq] = OG_id
 
 print("Length euk to og: ", len(euk_to_og_d))
 
@@ -45,10 +49,17 @@ for lines in neg_set:
     eukA = line[-2]
     eukB = line[-1]
     if eukA in euk_to_og_d and eukB in euk_to_og_d:
-        line += euk_to_og_d[eukA]
-        line +=  euk_to_og_d[eukB]
+        line += [euk_to_og_d[eukA]]
+        line += [euk_to_og_d[eukB]]
         line += ["\n"]
         neg_out_file.write("\t".join(line))
     else:
-        line += ["-","-","\n"]
-        neg_out_file.write("\t".join(line))
+        if eukA in euk_to_og_d:
+            line += [euk_to_og_d[eukA],"-", "\n"]
+            neg_out_file.write("\t".join(line))
+        elif eukB in euk_to_og_d:
+            line += ["-",euk_to_og_d[eukB], "\n"]
+            neg_out_file.write("\t".join(line))
+        else:
+            line += ["-","-", "\n"]
+            neg_out_file.write("\t".join(line))

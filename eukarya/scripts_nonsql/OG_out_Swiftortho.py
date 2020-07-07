@@ -11,6 +11,8 @@ file_og = sys.argv[1]
 file_sequence_ids = sys.argv[2]
 file_out = sys.argv[3]
 
+#Since we used blast files also used by and prepared for orthofinder
+#We need to translate the sequence id's to and from the id's used by orthofinder
 sequence_id_dict = {}
 for line in open(file_sequence_ids, 'r'):
     line = line.rstrip().split(": ")

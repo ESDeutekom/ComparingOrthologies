@@ -1,5 +1,6 @@
 #python3
 
+import os
 import sys
 from collections import Counter
 
@@ -8,8 +9,8 @@ from collections import Counter
 ## Trabuco et al. 2012
 ###################################
 
-if len(sys.argv) != 3:
-    print("Need 2 arguments: [Trabuco negative interaction file input] [uniprot to enseml id] [metadata human proteome] [out file name]")
+if len(sys.argv) != 5:
+    print("Need 4 arguments: [Trabuco negative interaction file input] [uniprot to enseml id] [metadata human proteome] [out file name]")
     sys.exit()
 
 interaction_file = sys.argv[1] #negative interaction file of Trabuco et al. 2012
@@ -18,11 +19,16 @@ euk4_file = sys.argv[3] #metadata file of our human proteome
 negative_file = sys.argv[4] #out file
 
 try:
-	open(sys.argv[1])
+    open(sys.argv[1])
     open(sys.argv[2])
     open(sys.argv[3])
 except IOError:
     print("No such input file"); sys.exit()
+
+#Check if file is not empty
+for file in (sys.argv[1], sys.argv[2], sys.argv[3]):
+    if os.path.getsize(file) <= 1:
+        print(file, "file is empty"); sys.exit()
 
 #translate uniprot kb to ensembl
 ukb_to_ens = {}

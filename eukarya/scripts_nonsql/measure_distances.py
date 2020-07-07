@@ -1,5 +1,6 @@
 #python3
 
+import os
 import sys
 import random
 import pandas as pd
@@ -13,26 +14,30 @@ from itertools import combinations, combinations_with_replacement
 ## between negative sets and the positive interaction set
 ############################################################
 
-if len(sys.argv) != 6:
-    print("Need 5 arguments: [Ortholgoy profiles] [LECA list file] [BioGRID interactions] [Trabuco negative interactions] [Pseudo negative interactions]")
+if len(sys.argv) != 7:
+    print("Need 6 arguments and an outfile: [Ortholgoy profiles] [LECA list file] [BioGRID interactions] [Trabuco negative interactions] [Pseudo negative interactions] [outfile]")
     sys.exit()
 
 pro_file = sys.argv[1] #phylogenetic profiles
 leca_file = sys.argv[2] #leca obtained from dollo
-int_file = sys.argv[3] #interactions file
-RnegSet_file = sys.argv[4] #Trabuco set
-PnegSet_file =  sys.argv[5] #pseudo negative set
+int_file = sys.argv[3] #interactions file biogrid translated to OGs
+RnegSet_file = sys.argv[4] #Trabuco set translated to OGs
+PnegSet_file = sys.argv[5] #pseudo negative set translated to OGs
 out_file = sys.argv[6] #file containing all the distances between sets
 
 try:
-	open(sys.argv[1])
+    open(sys.argv[1])
     open(sys.argv[2])
     open(sys.argv[3])
     open(sys.argv[4])
     open(sys.argv[5])
 except IOError:
-    print("No such input file"); sys.exit()
+    print("Something with input files"); sys.exit()
 
+#Check if file is not empty
+for file in (sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]):
+    if os.path.getsize(file) <= 1:
+        print(file, "file is empty"); sys.exit()
 
 #leca file to parse out only the LECA OGs
 leca_file = open(leca_file, "r")
@@ -43,30 +48,67 @@ for lines in leca_file:
 leca_file.close()
 print("Read leca file length: ", len(leca_og_d) )
 
-def get_distances(pro_file, leca_og_d ,int_file, out_file, funcs, type):
+#make seperate interaction dictionaries
+#Important here is that homodimers must be removed (OGa--OGa) and comparisons must be between OGs and not sequences
+#biogrid
+int_file = open(int_file, "r") #Interactions from biogrid
+int_dict = {}
+for lines in int_file:
+    line = lines.rstrip().split("\t")
+    OG1 = line[-2]
+    OG2 = line[-1]
+    pair = (OG1, OG2)
+    if pair not in int_dict:
+        #due to translations from eukarya ids to OG, there is redundancy again
+        #e.g. HSAP1, HSAP2 --> OG1, OG2 & HSAP2, HSAP3 --> OG2, OG1. If HSAP1 and HSAP3 are in the same OG
+        if pair[::-1] not in int_dict:
+            if pair[0] != pair[1]: #don't want to compare the same OGs with each other
+                int_dict[pair] = True
+int_file.close()
+print("Read biogrid parsed interactions length: ", len(int_dict))
+
+#pseudoneg
+#need to check if OGs are not in interactions of biogrid
+def neg_dict(neg_file, int_dict):
+    neg_file = open(neg_file, "r") #pseudo negative interactions from biogrid
+    neg_dict_out = {}
+    for lines in neg_file:
+        line = lines.rstrip().split("\t")
+        OG1 = line[-2]
+        OG2 = line[-1]
+        pair = (OG1, OG2)
+        if pair not in int_dict: #if it is not an interacting pair of OGs
+            if pair[::-1] not in int_dict:
+                if pair[0] != pair[1]: #not the same OG (comparesion to oneself)
+                    if pair[::-1] not in neg_dict_out: #add to negative interaction dictionary
+                        if pair not in neg_dict_out:
+                            neg_dict_out[pair] = True
+    neg_file.close()
+    return neg_dict_out
+
+pseudo_dict = neg_dict(PnegSet_file, int_dict)
+trabuco_dict = neg_dict(RnegSet_file, int_dict)
+print("Pseudo negative parsed interactions length: ", len(pseudo_dict))
+print("Trabuco negative parsed interactions length: ", len(trabuco_dict))
+
+
+def get_distances(pro_file, leca_og_d ,int_dict, out_file, funcs, type):
     pro_file = open(pro_file, "r") #OG profile file from different ortholgies
     header= pro_file.readline()
     for lines in pro_file:
         line = lines.rstrip().split("\t")
         og_id = line[0]
-        if og_id in leca_og_d:
+        if og_id in leca_og_d: #see if LECA OG
             profile = [float(i) for i in line[1:]]
             leca_og_d[og_id] = profile #Get profiles for LECA OGs
     pro_file.close()
     print("Read OG file lenght: ", len(leca_og_d))
 
-    int_file = open(int_file, "r") #Interactions or non interactions from biogrid or negative sets
-    int_dict = {}
-    for lines in int_file:
-        line = lines.rstrip().split("\t")
-        OG1 = line[-2]
-        OG2 = line[-1]
-        int_dict[(OG1, OG2)] = True
-    int_file.close()
-    print("Read interactions length: ", len(int_dict))
+    #removed interaction dict part
 
     #get all possible combinations of pair of OGs. All possible combinations of OGs in leca og dictionary
-    pairs_list = combinations_with_replacement(list(leca_og_d.keys()), 2)
+    #without redundancy
+    pairs_list = combinations(list(leca_og_d.keys()), 2)
 
     i_distance_matrix = {} #interacting distance matrix
 
@@ -76,7 +118,7 @@ def get_distances(pro_file, leca_og_d ,int_file, out_file, funcs, type):
         profA = leca_og_d[OG1]
         profB = leca_og_d[OG2]
         for measure, func in funcs.items():
-            if (OG1, OG2) in int_dict or (OG2, OG1) in int_dict: #since the niteractions could be from A-->B or B-->A or combinations_with_replacement
+            if (OG1, OG2) in int_dict or (OG2, OG1) in int_dict: #since the initeractions could be from A-->B or B-->A or combinations_with_replacement
             #we need to check both, but don't want redundancy
                 if pair in i_distance_matrix:
                     if measure not in i_distance_matrix[pair]:
@@ -120,8 +162,8 @@ out_files.write("\t".join(header)+"\n")
 out_files.close()
 
 print("Biogrid distances")
-get_distances(pro_file, leca_og_d, int_file, out_file, funcs, type = "BioGrid")
+get_distances(pro_file, leca_og_d, int_dict, out_file, funcs, type = "BioGrid")
 print("RusselNeg distances")
-get_distances(pro_file, leca_og_d, RnegSet_file, out_file, funcs, type = "RusselNeg")
+get_distances(pro_file, leca_og_d, trabuco_dict, out_file, funcs, type = "RusselNeg")
 print("PseudoNeg distances")
-get_distances(pro_file, leca_og_d, PnegSet_file, out_file, funcs, type = "PseudoNeg")
+get_distances(pro_file, leca_og_d, pseudo_dict, out_file, funcs, type = "PseudoNeg")

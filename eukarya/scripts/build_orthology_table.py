@@ -67,6 +67,7 @@ except:
     exit(1)
 
 # Parse the orthofinder data
+print(eukarya_dir+annotations_file[args.ortholog_method])
 logger.info("Loading Orthology information from file...")
 ortho_data = list()
 try:

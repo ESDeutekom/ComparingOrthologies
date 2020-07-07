@@ -1,32 +1,37 @@
 #python3
 
+import os
 import sys
 from itertools import groupby, chain
 from operator import itemgetter, add
 import copy
 
-#################################
-## Parse BIOGRID interactions
-#################################
+#######################################################
+## Parse BIOGRID interactions for biogrid redundancy
+## Translate to our eukarya4 species set
+#######################################################
 
-if len(sys.argv) != 8:
-    print("Need 7 arguments: [BioGRID interactions input file] [metadatafile of set] [ID translation file] [all_out file name] [sys_out file name] [taxID] [minimum pubmed IDs wanted]")
+if len(sys.argv) != 6:
+    print("Need 5 arguments: [BioGRID interactions input file] [metadatafile of set] [ID translation file] [all_out file name] [taxID]")
     sys.exit()
 
 BIOGRID_file = sys.argv[1] #interactions from BIOGRID database
 Euk4_file = sys.argv[2] #metadatafile of taxID
 IDtranslation_file = sys.argv[3] #translation file between ensembl id's used in biogrid and our set
 all_out_interactions = sys.argv[4] #interactions out file for human on our set with
-sys_out_interactions = sys.argv[5] #same as above, only also check amount of experimental methods used
-taxID = sys.argv[6] #taxID
-parse_num=sys.argv[7] #number of pubID's minimal
+taxID = sys.argv[5] #taxID
 
 try:
-	open(sys.argv[1])
+    open(sys.argv[1])
     open(sys.argv[2])
     open(sys.argv[3])
 except IOError:
     print("No such input file(s)"); sys.exit()
+
+#Check if file is not empty
+for file in (sys.argv[1], sys.argv[2], sys.argv[3]):
+    if os.path.getsize(file) <= 1:
+        print(file, "file is empty"); sys.exit()
 
 #Example taxID
 #HSAP_tax = 9606
@@ -37,24 +42,22 @@ except IOError:
 def ens_to_euk(euk_meta):
     euk_m = open(euk_meta, "r")
     next(euk_m) #skip first line
-    euk_to_ens = {}
+    ens_to_euk = {}
     for lines in euk_m:
         line = lines.rstrip().split("\t")
         seqID = line[0]
-        #ENSG = line[9][:line[9].find(".")] #gives -1 if not found, this is dangerous of you don't have a dot, because then line[9][:-1] is taken
-        #This fortunatly does not matter if is is really ensembl IDs, because they always have dot in our data for hsap
-        #for scer this is not the case
         ENSG = line[9].split(".")[0]
         longest_trans = line[7]
         if longest_trans == "1": #only take the longest transcript
-            if ENSG in euk_to_ens:
-                if seqID not in euk_to_ens[ENSG]:
-                    euk_to_ens[ENSG] += [seqID]
+            if ENSG in ens_to_euk:
+                if seqID not in ens_to_euk[ENSG]:
+                    ens_to_euk[ENSG] += [seqID]
             else:
-                euk_to_ens[ENSG] = [seqID]
-    return euk_to_ens
+                ens_to_euk[ENSG] = [seqID]
+    return ens_to_euk
 
 #ID translation dictionary, not all entrez have ensembl
+#some ensembl have more than 1 entrez
 def enz_to_ens(tax_ID, translation_file):
     translation_file = open(translation_file, "r")
     header = translation_file.readline()
@@ -63,15 +66,15 @@ def enz_to_ens(tax_ID, translation_file):
         line = lines.rstrip().split()
         taxID = line[0] #Organism ID NCBI Taxonomy ID
         if tax_ID == taxID:
-            if len(line) > 2:
+            if len(line) > 2: #if there is a translation
                 Entz = line[1] #GeneID == EtrezGene
                 ENSG = line[2] # Ensembl ID
-                if str(taxID) == str(tax_ID):
-                    if Entz in IDtranslation_dict:
-                        if ENSG not in IDtranslation_dict[Entz]:
-                            IDtranslation_dict[Entz] += [ENSG]
-                    else:
-                        IDtranslation_dict[Entz] = [ENSG]
+
+                if Entz in IDtranslation_dict:
+                    if ENSG not in IDtranslation_dict[Entz]:
+                        IDtranslation_dict[Entz] += [ENSG]
+                else:
+                    IDtranslation_dict[Entz] = [ENSG]
     return IDtranslation_dict
 
 #Cristeria: must be non-redundanrt interactions
@@ -84,12 +87,12 @@ def enz_to_ens(tax_ID, translation_file):
 def interaction_dict(tax_ID, BIOGRID_file):
     inter_dict = {}
     line_count = 0
-    BIOGRID_file = open(BIOGRID_file, "r")
+    BIOGRID_file = open(BIOGRID_file, "r") #BioGrid file is tab3 format
     header = BIOGRID_file.readline()
     for lines in BIOGRID_file:
         line = lines.rstrip().split("\t")
         line_count +=1
-        #BIOGRID interaction ID. Is a bit useless, because of redundant interactions having different IDs
+        #BIOGRID interaction ID. Is a bit useless, because of redundant (same) interactions having different IDs
         BG_int_ID = line[0]
         #Entrez IDs for interactors A and B & BIOGRID IDs for interactors A and B
         Entz_A = line[1]
@@ -99,29 +102,22 @@ def interaction_dict(tax_ID, BIOGRID_file):
         pubID = line[14] #Publication ID
         taxID = line[15] #Organism ID NCBI Taxonomy ID
         #Info we want to know to check how much we can trust the data
-        Sys = line[11] #System
-        SysT = line[12] #Sytem type
-        TP = line[17] #Throughput
         if str(taxID) == str(tax_ID): # check if it is the right taxID
             if Entz_A in inter_dict:
                 if Entz_B in inter_dict[Entz_A]:
-                    if pubID in inter_dict[Entz_A][Entz_B]:
-                        for i in range(len(inter_dict[Entz_A][Entz_B][pubID])):
-                            if Sys not in inter_dict[Entz_A][Entz_B][pubID][i]:
-                                inter_dict[Entz_A][Entz_B][pubID] += [Sys]
-                    else:
-                        inter_dict[Entz_A][Entz_B][pubID] = [Sys]
+                    if pubID not in inter_dict[Entz_A][Entz_B]:
+                        inter_dict[Entz_A][Entz_B] += [pubID]
                 else:
-                    inter_dict[Entz_A][Entz_B] = {}
-                    inter_dict[Entz_A][Entz_B][pubID] = [Sys]
+                    inter_dict[Entz_A][Entz_B] = [pubID]
             else:
-                    inter_dict[Entz_A] = {}
-                    inter_dict[Entz_A][Entz_B] = {}
-                    inter_dict[Entz_A][Entz_B][pubID] = [Sys]
+                inter_dict[Entz_A] = {}
+                inter_dict[Entz_A][Entz_B] = [pubID]
+
+
     print("lines in BioGRID file: ", line_count)
     return inter_dict
 
-#clean all the empty parts in the nested dictionary
+#function to clean all the empty parts in the nested dictionary
 def clean_empty(d):
     if not isinstance(d, (dict, list)):
         return d
@@ -154,17 +150,14 @@ def nonR_dict(interaction_dict):
                 BAd = interaction_dict[ABr[0]][ABr[1]]
                 for pubID in BAd:
                     if pubID in ABd:
-                        for sys in BAd[pubID]:
-                            if sys in ABd[pubID]:
-                                index_sys = nonR_dict[ABr[0]][ABr[1]][pubID].index(sys)
-                                nonR_dict[ABr[0]][ABr[1]][pubID][index_sys] = ""
-                            else:
-                                nonR_dict[AB[0]][AB[1]][pubID].append(sys)
-                                index_sys = nonR_dict[ABr[0]][ABr[1]][pubID].index(sys)
-                                nonR_dict[ABr[0]][ABr[1]][pubID][index_sys] = ""
+                        index_pub = nonR_dict[ABr[0]][ABr[1]].index(pubID)
+                        nonR_dict[ABr[0]][ABr[1]][index_pub] = "" #remove
+                #else if pubID not in A-B, we want to remove B-A and add pubID from B-A to A-B
+                #this way we only keep the A-B non redundant ones
                     else:
-                        nonR_dict[AB[0]][AB[1]][pubID] = BAd[pubID]
-                        nonR_dict[ABr[0]][ABr[1]][pubID] = ""
+                        nonR_dict[AB[0]][AB[1]].append(pubID) #add
+                        index_pub = nonR_dict[ABr[0]][ABr[1]].index(pubID)
+                        nonR_dict[ABr[0]][ABr[1]][index_pub] = "" #remove
     return(clean_empty(nonR_dict))
 
 # get all non redundant interactions with more than x pubIDs
@@ -181,7 +174,7 @@ print("Entrez from biogrid translated to ensemble: ", len(enz_to_ens.keys()))
 print("starting")
 interactionD = interaction_dict(taxID, BIOGRID_file) #contains all interactions, also redundant ones
 print("Interaction BioGRID done")
-nonR_dict = nonR_dict(interactionD) #[EntzA][EntzB][pubID] #all non redundant interactions
+nonR_dict = nonR_dict(interactionD) #[EntzA][EntzB]: [pubID, pubID] #all non redundant interactions
 print("Non redundant interactions done")
 
 
@@ -201,14 +194,10 @@ interactions_out = open(all_out_interactions,"w")
 interactions_out.write(header + "\n")
 interactions_out.close()
 
-interactions_out_sys = open(sys_out_interactions, "w")
-interactions_out_sys.write(header + "\n")
-interactions_out_sys.close()
 
 count_int = 0 #count interactions with more than 2 publications
 count_int_sys = 0#count interactions with more than 2 experimental validations and publications
 print("Going into nonR_dict")
-pubID_num = int(parse_num)
 
 for A in nonR_dict: # interactor A entrez from biogrid
     for B in nonR_dict[A]: # interactor B entrez from biogrid
@@ -231,26 +220,16 @@ for A in nonR_dict: # interactor A entrez from biogrid
                         new_line = "\t".join([
                         A, ",".join(enz_to_ens[A]), ",".join(starterA),
                         B, ",".join(enz_to_ens[B]), ",".join(starterB),
-                        ",".join(list(nonR_dict[A][B].keys()))])
-                        if len(list(nonR_dict[A][B].keys())) >= pubID_num: #more than pubID_num publications
-                            interactions_out = open ( all_out_interactions,"r" )
-                            lineList = interactions_out.readlines()[-1] #readlast line
+                        ",".join(nonR_dict[A][B])])
+                        #if len(list(nonR_dict[A][B].keys())) >= pubID_num: #more than pubID_num publications
+                        interactions_out = open ( all_out_interactions,"r" )
+                        lineList = interactions_out.readlines()[-1] #readlast line
+                        interactions_out.close()
+                        if lineList != new_line:
+                            interactions_out = open(all_out_interactions,"a")
+                            interactions_out.write(new_line+"\n")
                             interactions_out.close()
-                            if lineList != new_line:
-                                interactions_out = open(all_out_interactions,"a")
-                                interactions_out.write(new_line+"\n")
-                                interactions_out.close()
-                                count_int+= 1
-                            for i in range(len(list(nonR_dict[A][B].values()))): #if more than pubID_num publications
-                                if len(list(nonR_dict[A][B].values())[i]) > 1: #atleast need 2 different experimental validations
-                                    interactions_out_sys = open ( sys_out_interactions,"r" )
-                                    lineList_sys = interactions_out_sys.readlines()[-1].rstrip()
-                                    interactions_out_sys.close()
-                                    if lineList_sys != new_line:
-                                        interactions_out_sys = open(sys_out_interactions,"a")
-                                        interactions_out_sys.write(new_line+"\n")
-                                        interactions_out_sys.close()
-                                        count_int_sys += 1
+                            count_int+= 1
 
-print("Interactions translated to eukarya with more than", pubID_num, "publication: ", count_int)
-print("Interactions translated to eukarya with more than 1 experimental validation: ", count_int_sys)
+
+print("Interactions translated to eukarya: ", count_int)

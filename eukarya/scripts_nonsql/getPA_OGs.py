@@ -1,5 +1,6 @@
 #python3
 
+import os
 import sys
 
 #####################################################
@@ -18,6 +19,10 @@ try:
 	open(sys.argv[1])
 except IOError:
     print("No such input file"); sys.exit()
+
+#Check if file is not empty
+if os.path.getsize(sys.argv[1]) <= 1:
+    print(OGs_txt, "file is empty"); sys.exit()
 
 
 OGs_txt = open(OGs_txt, "r")

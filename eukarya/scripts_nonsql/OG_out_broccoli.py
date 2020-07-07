@@ -1,11 +1,20 @@
 #python 3
 
+import os
 import sys
 
 ######################################################
 ## Make required OG input file from orthology output
 ## Broccoli orthology
 ######################################################
+try:
+    open(sys.argv[1])
+except IOError:
+    print("No such input file(s)"); sys.exit()
+
+#Check if file is not empty
+if os.path.getsize(sys.argv[1]) <= 1:
+    print(sys.argv[1], "file is empty"); sys.exit()
 
 file_in = sys.argv[1]
 file_out = sys.argv[2]

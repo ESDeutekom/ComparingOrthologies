@@ -240,14 +240,14 @@ class Sonicparanoid_default(Base,Orthology):
     og_id = Column(String(10))#, index=True)
 
 class Sonicparanoid_fast(Base,Orthology):
-    """SQLalchemy object representing the Sonicparanoid_default OGs table."""
+    """SQLalchemy object representing the Sonicparanoid_fast OGs table."""
     __tablename__ = 'sonicparanoid_fast'
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     gene_id = Column(Integer, ForeignKey(Genes.gene_id))#, index=True)#, unique=True)
     og_id = Column(String(10))#, index=True)
 
 class Sonicparanoid_sensitive(Base,Orthology):
-    """SQLalchemy object representing the Sonicparanoid_default OGs table."""
+    """SQLalchemy object representing the Sonicparanoid_sensitive OGs table."""
     __tablename__ = 'sonicparanoid_sensitive'
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     gene_id = Column(Integer, ForeignKey(Genes.gene_id))#, index=True)#, unique=True)
@@ -379,21 +379,12 @@ def get_orthology_leca_tables():
     orthology_leca_tables = dict()
     orthology_leca_tables['orthofinder_diamond_e-3'] = (OrthofinderDiamond, OrthofinderDiamondLECA)
     orthology_leca_tables['eggnog_diamond'] = (EggnogDiamond, EggnogDiamondLECA)
-    #orthology_leca_tables['eggnog_hmmer'] = (EggnogHmmer, EggnogHmmerLECA)
     orthology_leca_tables['eggnog_hmmer_corrected'] = (EggnogHmmerCor, EggnogHmmerLECACor)
-    #orthology_leca_tables['orthofinder_blast_e-1'] = (OrthofinderBlast_1, OrthofinderBlast_1LECA)
     orthology_leca_tables['orthofinder_blast_e-3'] = (OrthofinderBlast_3, OrthofinderBlast_3LECA)
-    #orthology_leca_tables['orthofinder_blast_e+1'] = (OrthofinderBlast, OrthofinderBlastLECA)
-    #orthology_leca_tables['panther'] = (Panther, PantherLECA)
     orthology_leca_tables['panther_corrected'] = (Panther_cor, PantherLECA_Cor)
     orthology_leca_tables['manual'] = (Manual, ManualLECA)
-    #orthology_leca_tables['julian_all'] = (Julian, JulianLECA)
-    #orthology_leca_tables['julian_all_90'] = (Julian90, Julian90LECA)
-    #orthology_leca_tables['julian_all_50'] = (Julian50, Julian50LECA)
     orthology_leca_tables['broccoli'] = (Broccoli, BroccoliLECA)
     orthology_leca_tables['swiftortho'] = (Swiftortho, SwiftorthoLECA)
-    #orthology_leca_tables['sonicparanoid_default'] = (Sonicparanoid_default, Sonicparanoid_defaultLECA)
-    #orthology_leca_tables['sonicparanoid_fast'] = (Sonicparanoid_fast, Sonicparanoid_fastLECA)
     orthology_leca_tables['sonicparanoid_sensitive'] = (Sonicparanoid_sensitive, Sonicparanoid_sensitiveLECA)
     return orthology_leca_tables
 

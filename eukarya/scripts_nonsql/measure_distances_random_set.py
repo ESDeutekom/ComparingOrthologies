@@ -1,5 +1,6 @@
 #python3
 
+import os
 import sys
 import random
 import pandas as pd
@@ -12,10 +13,19 @@ from itertools import combinations, combinations_with_replacement
 ## Measure distances for the random interaction set
 ## This was done later, so added seperate file and code
 #######################################################
+if len(sys.argv) != 4:
+    print("Need 3 arguments: [Orthologous profile input file] [random interactions file] [distance out file name]")
+    sys.exit()
 
 pro_file = sys.argv[1] #phylogenetic profile
 int_file = sys.argv[2] #random interactions file
 out_file = sys.argv[3] #out file with distances between random set
+
+try:
+    open(sys.argv[1])
+    open(sys.argv[2])
+except IOError:
+    print("No such input file"); sys.exit()
 
 def get_distances(pro_file, int_file, out_file, funcs, type):
     pro_file = open(pro_file, "r") #OG profile file from different ortholgies

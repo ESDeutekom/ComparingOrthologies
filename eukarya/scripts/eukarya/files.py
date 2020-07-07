@@ -24,7 +24,7 @@ eukarya_origin_path = "/hosts/linuxhome/siluur/john/Data/eukarya/"
 
 # The eukarya directory
 eukarya_dir = os.environ.get("EUKARYA_PATH",eukarya_origin_path)
-
+print(eukarya_dir)
 # The files
 # Core eukarya files
 eukarya_file = dict()
@@ -42,48 +42,29 @@ eukarya_file['tree_fullnames'] = 'data_set/trees/eukarya_species.names.newick'
 
 # Files containing annotations
 annotations_file = dict()
-annotations_file['orthofinder_diamond_e-3'] = 'annotations/orthofinder_diamond/Orthogroups_orthofinder_diamond_e-3.txt'
+annotations_file['orthofinder_diamond_e-3'] = 'annotations/Orthogroups_orthofinder_diamond_e-3.txt'
 annotations_file['orthofinder_diamond'] = annotations_file['orthofinder_diamond_e-3']  # Legacy
-annotations_file['eggnog_diamond'] = 'annotations/eggnog/Orthogroups_eggnog_diamond.txt'
-#annotations_file['eggnog_hmmer'] = 'annotations/eggnog/Orthogroups_eggnog_hmmer.txt'
+annotations_file['eggnog_diamond'] = 'annotations/Orthogroups_eggnog_diamond.txt'
 annotations_file['eggnog'] = annotations_file['eggnog_diamond']  # Legacy
-#annotations_file['orthofinder_blast_e-1'] = 'annotations/orthofinder_blast/Orthogroups_orthofinder_blast_e-1.txt'
-annotations_file['orthofinder_blast_e-3'] = 'annotations/orthofinder_blast/Orthogroups_orthofinder_blast_e-3.txt'
-#annotations_file['orthofinder_blast_e+1'] = 'annotations/orthofinder_blast/Orthogroups_orthofinder_blast_e+1.txt'
-#annotations_file['orthofinder_blast'] = annotations_file['orthofinder_blast_e+1']  # Legacy
-#annotations_file['panther'] = 'annotations/panther/Orthogroups_panther_e-3.txt'
-annotations_file['panther_corrected'] = 'annotations/panther/Orthogroups_em3_panther_different.txt'
+annotations_file['orthofinder_blast_e-3'] = 'annotations/Orthogroups_orthofinder_blast_e-3.txt'
+annotations_file['panther_corrected'] = 'annotations/Orthogroups_panther_different.txt'
 annotations_file['manual'] = 'annotations/manual_ogs/Orthogroups_small_scale.txt'
-#annotations_file['julian_all'] = 'annotations/julians_orthology/Orthogroups_julian_all.txt'
-#annotations_file['julian_all_90'] = 'annotations/julians_orthology/Orthogroups_julian_all_merged_90.txt'
-#annotations_file['julian_all_50'] = 'annotations/julians_orthology/Orthogroups_julian_all_merged_50.txt'
 annotations_file['sqlite3'] = 'database/eukarya_annotations_db.sqlite3'
-annotations_file['eggnog_hmmer_corrected'] = 'annotations/eggnog/Orthogroups_EggNOG_hmmer_corrected.txt'
-annotations_file['broccoli'] = 'annotations/broccoli/Orthogroups_broccoli.txt'
-annotations_file['swiftortho'] = 'annotations/swiftortho/Orthogroups_Swiftortho_c50.txt'
-#annotations_file['sonicparanoid_default'] = 'annotations/sonicparanoid/Orthogroups_Sonicparanoid_default.txt'
-#annotations_file['sonicparanoid_fast'] = 'annotations/sonicparanoid/Orthogroups_Sonicparanoid_fast.txt'
-annotations_file['sonicparanoid_sensitive'] = 'annotations/sonicparanoid/Orthogroups_Sonicparanoid_sensitive.txt'
+annotations_file['eggnog_hmmer_corrected'] = 'annotations/Orthogroups_eggnog_hmmer_corrected.txt'
+annotations_file['broccoli'] = 'annotations/Orthogroups_broccoli.txt'
+annotations_file['swiftortho'] = 'annotations/Orthogroups_Swiftortho_c50.txt'
+annotations_file['sonicparanoid_sensitive'] = 'annotations/Orthogroups_Sonicparanoid_sensitive.txt'
 
 # Files containing leca ogs, for the above files
-annotations_file['orthofinder_diamond_e-3_LECA'] = "annotations/orthofinder_diamond/leca_orthologous_group_list_orthofinder_diamond_e-3.tsv"
-#annotations_file['orthofinder_blast_e-1_LECA'] = "annotations/orthofinder_blast/leca_orthologous_group_list_orthofinder_blast_e-1.tsv"
-annotations_file['orthofinder_blast_e-3_LECA'] = "annotations/orthofinder_blast/leca_orthologous_group_list_orthofinder_blast_e-3.tsv"
-#annotations_file['orthofinder_blast_e+1_LECA'] = "annotations/orthofinder_blast/leca_orthologous_group_list_orthofinder_blast_e+1.tsv"
-annotations_file['eggnog_diamond_LECA'] = "annotations/eggnog/leca_orthologous_group_list_eggnog_diamond.tsv"
-annotations_file['eggnog_hmmer_corrected_LECA'] = "annotations/eggnog/leca_orthologous_group_list_eggnog_hmmer_corrected.txt"
-#annotations_file['eggnog_hmmer_LECA'] = "annotations/eggnog/leca_orthologous_group_list_eggnog_hmmer.tsv"
-#annotations_file['panther_LECA'] = "annotations/panther/leca_orthologous_group_list_panther_e-3.tsv"
-annotations_file['panther_corrected_LECA'] = "annotations/panther/Panther_em3_LECA_different"
+annotations_file['orthofinder_diamond_e-3_LECA'] = "annotations/leca_orthologous_group_list_orthofinder_diamond_e-3"
+annotations_file['orthofinder_blast_e-3_LECA'] = "annotations/leca_orthologous_group_list_orthofinder_blast_e-3"
+annotations_file['eggnog_diamond_LECA'] = "annotations/leca_orthologous_group_list_eggnog_diamond"
+annotations_file['eggnog_hmmer_corrected_LECA'] = "annotations/leca_orthologous_group_list_eggnog_hmmer_corrected"
+annotations_file['panther_corrected_LECA'] = "annotations/leca_orthologous_group_list_panther_different"
 annotations_file['manual_LECA'] = 'annotations/manual_ogs/leca_orthologous_group_list_small_scale.tsv'
-#annotations_file['julian_all_LECA'] = "annotations/julians_orthology/leca_orthologous_group_list_julian_all.tsv"
-#annotations_file['julian_all_90_LECA'] = "annotations/julians_orthology/leca_orthologous_group_list_julian_all_merged_90.tsv"
-#annotations_file['julian_all_50_LECA'] = "annotations/julians_orthology/leca_orthologous_group_list_julian_all_merged_50.tsv"
-annotations_file['broccoli_LECA'] = 'annotations/broccoli/Broccoli_LECA'
-annotations_file['swiftortho_LECA'] = 'annotations/swiftortho/Swiftortho_c50_LECA'
-#annotations_file['sonicparanoid_default_LECA'] = 'annotations/sonicparanoid/Sonicparanoid_default_LECA'
-#annotations_file['sonicparanoid_fast_LECA'] = 'annotations/sonicparanoid/Sonicparanoid_fast_LECA'
-annotations_file['sonicparanoid_sensitive_LECA'] = 'annotations/sonicparanoid/Sonicparanoid_sensitive_LECA'
+annotations_file['broccoli_LECA'] = 'annotations/leca_orthologous_group_list_broccoli'
+annotations_file['swiftortho_LECA'] = 'annotations/leca_orthologous_group_list_Swiftortho_c50'
+annotations_file['sonicparanoid_sensitive_LECA'] = 'annotations/leca_orthologous_group_list_Sonicparanoid_sensitive'
 
 
 # Setup the path to a local copy. Make a temporary one if not set.
