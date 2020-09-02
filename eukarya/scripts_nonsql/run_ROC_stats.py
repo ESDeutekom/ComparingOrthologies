@@ -23,10 +23,7 @@ files = ["eggnog_diamond_distances",\
         "Swiftortho_c50_distances"]
 out_file = "./Results/roc_bootstraps"
 
-#"o1_distances_5pubID",\
 file_list = ["".join([file_dir, el]) for el in files]
-
-#Julian_set = ['julian_distances_5pubID','julian_distances_merged50_5pubID','julian_distances_merged90_5pubID']
 
 def bootstrap_all(file_list, out_file):
     #make dictionary with all the dataframes of different distances

@@ -3,7 +3,7 @@
 <p align="center"><img src="WorkflowCode.png" width="1000" /></p>
 
 
-Manuscript: "Comparing orthology methods and their performance by recapitulating patterns of eukaryotic genome evolution."
+Manuscript: "Benchmarking orthology methods using phylogenetic patterns defined at the base of Eukaryotes"
 Authors: E.S. Deutekom, B. Snel, T.J.P. van Dam
 
 ## Disclaimer
